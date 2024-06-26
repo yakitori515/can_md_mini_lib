@@ -17,9 +17,9 @@ int mini_md_lib::send(int* speed){
         data[i].DATA.SPEED = abs(speed[i]);
         
         if(0 < speed[i]){
-            data[i].DATA.STATE=0b10;
-        }else if(speed[i] < 0){
             data[i].DATA.STATE=0b01;
+        }else if(speed[i] < 0){
+            data[i].DATA.STATE=0b10;
         }else{
             data[i].DATA.STATE=0b00;
         }
@@ -29,11 +29,13 @@ int mini_md_lib::send(int* speed){
 
     }
     int data_count=0;
-    for(int j=0;j<=_motor_num/4;j++){
+    for(int j=0;j<=(_motor_num/4);j++){
         _msg.id=0x301+j;
-        for(int  count=0;count<4;count++){
-            _msg.data[count*2] = (char)(data[data_count].SEND_DATA >> 8);
-            _msg.data[count*2+1] = (char)(data[data_count].SEND_DATA & 0xff);
+        for(int count=0;count<4;count++){
+            if(data_count<_motor_num){
+                _msg.data[count*2] = (char)(data[data_count].SEND_DATA >> 8);
+                _msg.data[count*2+1] = (char)(data[data_count].SEND_DATA & 0xff);
+            }
             data_count++;
         }
         if(!_can.write(_msg)){
