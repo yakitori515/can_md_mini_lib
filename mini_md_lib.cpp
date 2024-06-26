@@ -10,7 +10,7 @@ mini_md_lib::mini_md_lib(CAN &can, int motor_num)
 
 int mini_md_lib::send(int* speed){
     int _abs_speed[_motor_num];
-    CANMessage _msg[_motor_num];
+    CANMessage _msg;
     can_send_data data[_motor_num];
     for(int i = 0; i < _motor_num; i++){
 
